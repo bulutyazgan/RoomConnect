@@ -7,17 +7,6 @@ This project converts ngrok-generated URLs into simplified room numbers, allowin
 
 Currently, the project functions as a basic chatroom but demonstrates the potential to be integrated into more complex systems, such as multiplayer games built with frameworks like Pygame.
 
-## Why I Created This
-I developed this project as an experiment to integrate easy multiplayer connectivity into low-level projects without relying on complex setups. For developers working on Pygame or similar frameworks, this approach simplifies the process of adding multiplayer features.
-
-While this is just a prototype, I am open to expanding it further if it sparks interest, potentially making it more compatible with game development frameworks.
-
-## Target Audience
-This project is ideal for:
-- Developers looking to add internet-based multiplayer features to their low-level projects.
-- Game developers using frameworks like Pygame who want to simplify multiplayer implementation.
-- Anyone seeking an alternative to port forwarding for establishing network connections.
-
 ## Features
 - Converts dynamic ngrok URLs into room numbers for easy sharing.
 - Eliminates the need for port forwarding.
