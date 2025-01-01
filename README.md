@@ -1,4 +1,4 @@
-# ChatRoom_OverTheNetwork
+# ChatRoom_OverTheNetwork / An alternative to port forwarding for multiplayer functionalities
 This is a chatroom app that utilizes ngrok's free utilities into a chatroom that could be used over the network, without any port forwarding.
 
 # Why?
