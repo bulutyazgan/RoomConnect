@@ -15,6 +15,8 @@ This is currently a prototype of the concept. If it gains interest, I plan to ex
    pip install -r requirements.txt
 
 ![Example usage](screenshot1.png)
+![Example usage](screenshot2.png)
+
 
 
 ## Possible Error
