@@ -1,0 +1,2 @@
+[console_scripts]
+ngrok-asgi=ngrok:__main__.asgi_cli
