@@ -14,5 +14,9 @@ This is currently a prototype of the concept. If it gains interest, I plan to ex
    ```bash
    pip install -r requirements.txt
 
+![Example usage](screenshot.png)
+
+
 ## Possible Error
 The connection assumes that your ngrok URL uses the "eu" prefix. If you are outside the EU or if ngrok generates a URL with a different format for any reason, you may need to modify the link handling in the code.
+
