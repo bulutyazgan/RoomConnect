@@ -14,7 +14,7 @@ This is currently a prototype of the concept. If it gains interest, I plan to ex
    ```bash
    pip install -r requirements.txt
 
-![Example usage](screenshot.png)
+![Example usage](screenshot1.png)
 
 
 ## Possible Error
