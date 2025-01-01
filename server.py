@@ -3,7 +3,7 @@ import ngrok
 import threading
 
 with open("ngrok_token.txt", "r") as f:
-    ngrok_token = f.read()
+    ngrok_token = f.read().strip()
 ngrok.set_auth_token(ngrok_token)
 
 HOST = "localhost"
