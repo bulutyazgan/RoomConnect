@@ -1,5 +1,5 @@
 env
 
-ngrok_token.txt
+.ngrok_token.txt
 
 .DS_Store

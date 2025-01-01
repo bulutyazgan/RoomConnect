@@ -29,13 +29,11 @@ This project is ideal for:
    git clone https://github.com/siryazgan/RoomConnect
    cd RoomConnect
    ```
-2. Create a file named `ngrok_token.txt` in the same directory as `server.py`.
-3. Add your ngrok token to the file without any prefix or additional text.
-4. Install the required dependencies by running:
+2. Install the required dependencies by running:
    ```bash
    pip install -r requirements.txt
    ```
-5. Run the server and client scripts to start the chatroom.
+3. Run the server and client scripts to start the chatroom. (The server will ask for your ngrok auth-token the first time you run it, and save it to a file named `.ngrok_token.txt`)
 
 ## Example Usage
 Below are some screenshots demonstrating the application in action:

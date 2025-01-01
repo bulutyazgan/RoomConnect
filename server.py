@@ -1,10 +1,16 @@
 import socket
 import ngrok
 import threading
+import os
 
-with open("ngrok_token.txt", "r") as f:
-    ngrok_token = f.read().strip()
-ngrok.set_auth_token(ngrok_token)
+if os.path.exists(".ngrok_token.txt"):
+    with open(".ngrok_token.txt", "r") as f:
+        ngrok_token = f.read().strip()
+    ngrok.set_auth_token(ngrok_token)
+else:
+    ngrok_token = input("Please enter your ngrok auth-token (you will only have to do this once): ")
+    with open(".ngrok_token.txt", "w") as f:
+        f.write(ngrok_token)
 
 HOST = "localhost"
 PORT = 27555
