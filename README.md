@@ -45,3 +45,92 @@ I am open to feedback and suggestions! Feel free to raise issues or contribute.
 
 ## Documentation
 For detailed usage instructions, see the [documentation](documentation.md).
+
+# RoomConnect 🎮
+
+Make your Pygame games multiplayer! Like playing with friends over the internet.
+
+## How to Start 🚀
+
+1. Install the thing you need:
+```bash
+pip install pyngrok
+```
+
+2. Add RoomConnect to your game:
+```python
+from RoomConnect import RoomConnect
+network = RoomConnect()
+```
+
+## How it Works 📝
+
+Think of it like passing notes in class:
+- One player is the "host" (like the teacher)
+- Other players can "join" using a special room number
+- Players send messages to tell others what they did
+
+### Messages are like Notes 📨
+
+Messages look like this:
+```python
+# In a game of Tic-Tac-Toe:
+{
+    'type': 'move',         # What kind of message
+    'data': {              # What happened
+        'position': (1, 1),  # Where they clicked
+        'symbol': 'X'        # What to draw
+    },
+    'sender': 'Player1'    # Who sent it
+}
+```
+
+## Making Your Game Multiplayer 🎯
+
+1. Start the game:
+```python
+network = RoomConnect()
+network.set_token("your_ngrok_token")  # Only needed once!
+
+# To be the host:
+room_number = network.host_game("YourName")
+print(f"Tell your friend this number: {room_number}")
+
+# To join a friend's game:
+network.join_game(room_number, "YourName")
+```
+
+2. Tell RoomConnect what messages to expect:
+```python
+network.register_message_type("move")
+network.register_message_type("chat")
+```
+
+3. Send things that happen in your game:
+```python
+# When player makes a move:
+network.send_game_data("move", {
+    "x": 100,
+    "y": 200
+})
+```
+
+4. Check for messages from other players:
+```python
+# In your game loop:
+messages = network.get_messages()
+if messages:
+    for msg in messages:
+        if msg['type'] == "move":
+            # Do something with msg['data']
+```
+
+## Important Functions 🛠️
+
+- `host_game(nickname)` - Start a new game
+- `join_game(room_number, nickname)` - Join someone's game
+- `register_message_type(type)` - Tell what messages to expect
+- `send_game_data(type, data)` - Send something to other players
+- `get_messages()` - Get messages from other players
+
+That's it! Now you can make any game multiplayer! 🌟
