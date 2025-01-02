@@ -1,7 +1,6 @@
 import socket
 import threading
 import ngrok
-import os
 import json
 import time
 
@@ -14,20 +13,13 @@ class RoomConnect:
         self.connected = False
         self.port = 27555
         self.room_number = None
-        self._setup_ngrok()
         self.message_types = set()
         self.message_queue = []
         self.clients = []  # Only used by host
-        
-    def _setup_ngrok(self):
-        if os.path.exists(".ngrok_token.txt"):
-            with open(".ngrok_token.txt", "r") as f:
-                ngrok_token = f.read().strip()
-            ngrok.set_auth_token(ngrok_token)
-        else:
-            ngrok_token = input("Please enter your ngrok auth-token (you will only have to do this once): ")
-            with open(".ngrok_token.txt", "w") as f:
-                f.write(ngrok_token)
+
+    def set_token(self, token):
+        """Set ngrok authentication token"""
+        ngrok.set_auth_token(token)
 
     def host_game(self, nickname):
         self.is_host = True
@@ -39,7 +31,6 @@ class RoomConnect:
         tunnel = ngrok.forward(self.port, "tcp")
         public_url = tunnel.url()
         self.room_number = public_url.replace("tcp://", "").replace(".tcp.eu.ngrok.io:", "")
-        print(f"Room Number: {self.room_number}")
         
         threading.Thread(target=self._accept_connections, daemon=True).start()
         return self.room_number
@@ -62,9 +53,10 @@ class RoomConnect:
             return False
 
     def _accept_connections(self):
-        while True:
+        while self.connected:
             try:
                 client, addr = self.socket.accept()
+                self.clients.append(client)
                 threading.Thread(target=self._handle_client, 
                                args=(client, addr), 
                                daemon=True).start()
@@ -72,7 +64,6 @@ class RoomConnect:
                 break
 
     def _handle_client(self, client, addr):
-        self.clients.append(client)
         while True:
             try:
                 data = client.recv(1024).decode('utf-8')
@@ -100,37 +91,8 @@ class RoomConnect:
                 break
         self.connected = False
 
-    def _process_data(self, data):
-        """Process incoming JSON data"""
-        try:
-            message = json.loads(data)
-            if message['type'] in self.message_types:
-                self.message_queue.append(message)
-        except:
-            pass
-
-    def send_data(self, data):
-        """Legacy method - consider using send_game_data instead"""
-        if self.connected:
-            try:
-                message = {
-                    'type': 'CHAT',
-                    'data': data,
-                    'sender': self.nickname,
-                    'timestamp': time.time()
-                }
-                if self.is_host:
-                    self._broadcast(json.dumps(message))
-                else:
-                    self.socket.send(json.dumps(message).encode('utf-8'))
-                return True
-            except:
-                return False
-        return False
-
     def send_game_data(self, msg_type, data):
-        """Send game data of registered type"""
-        if msg_type not in self.message_types:
+        if not msg_type in self.message_types:
             return False
             
         message = {
@@ -141,35 +103,44 @@ class RoomConnect:
         }
         
         try:
+            data = json.dumps(message)
             if self.is_host:
-                self._broadcast(json.dumps(message))
+                self._broadcast(data)
             else:
-                self.socket.send(json.dumps(message).encode('utf-8'))
+                self.socket.send(data.encode('utf-8'))
             return True
         except:
+            self.connected = False
             return False
 
-    def get_messages(self):
-        """Return and clear message queue"""
-        messages = self.message_queue.copy()
-        self.message_queue.clear()
-        return messages
-
     def _broadcast(self, data, sender=None):
-        """Send data to all clients except sender"""
         if self.is_host:
+            disconnected = []
             for client in self.clients:
                 if client != sender:
                     try:
                         client.send(data.encode('utf-8'))
                     except:
-                        self.clients.remove(client)
+                        disconnected.append(client)
+            
+            for client in disconnected:
+                self.clients.remove(client)
+                client.close()
+
+    def get_messages(self):
+        messages = self.message_queue.copy()
+        self.message_queue.clear()
+        return messages
 
     def register_message_type(self, msg_type):
-        """Register a valid message type"""
         self.message_types.add(msg_type)
 
     def close(self):
+        self.connected = False
+        if self.is_host:
+            for client in self.clients:
+                client.close()
+            self.clients.clear()
         self.socket.close()
         if self.is_host:
             ngrok.disconnect()
