@@ -33,7 +33,6 @@ while running:
 
 ## Setup
 1. Clone the repository:
-   ```bash
    git clone https://github.com/siryazgan/RoomConnect
    cd RoomConnect
    ```
