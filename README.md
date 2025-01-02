@@ -17,7 +17,7 @@ RoomConnect uses a message system similar to Pygame's event system. Instead of c
 # Game loop example
 while running:
     # Check network messages
-    if messages := network.get_messages():
+    messages = network.get_messages():
         for msg in messages:
             if msg['type'] == 'move':
                 handle_player_move(msg['data'])
