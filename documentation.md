@@ -1,124 +1,64 @@
 # RoomConnect Documentation
 
-## Overview
-RoomConnect is a networking library for easy multiplayer integration in Pygame projects. It handles connections through ngrok, eliminating the need for port forwarding or complex network setup.
-
-## Setup
-1. Install required packages:
-```bash
-pip install pyngrok
-```
-
-2. First use will prompt for ngrok auth token
-   - Get token from [ngrok dashboard](https://dashboard.ngrok.com/auth)
-   - Token is saved locally for future use
-
-## Basic Usage
-
-### Initialization
+## Quick Start
 ```python
 from RoomConnect import RoomConnect
 
 network = RoomConnect()
+network.set_token("your_ngrok_token")
 ```
 
-### Hosting a Game
+## Core Functions
+
+### Connection
 ```python
-# Start hosting
-room_number = network.host_game("HostNickname")
-print(f"Room Code: {room_number}")  # Share this with other players
+# Host a game
+room_number = network.host_game("Player1")
+
+# Join a game
+success = network.join_game(room_number, "Player2")
 ```
 
-### Joining a Game
+### Message Types
 ```python
-# Join using room number
-success = network.join_game("012345", "PlayerNickname")
-if not success:
-    print("Failed to connect")
-```
-
-## Message System
-
-### Registering Message Types
-```python
-# Register message types before sending/receiving
-network.register_message_type("POSITION")
-network.register_message_type("SCORE")
-network.register_message_type("ACTION")
-```
-
-### Sending Data
-```python
-# Send position update
-network.send_game_data("POSITION", {"x": 100, "y": 200})
-
-# Send score update
-network.send_game_data("SCORE", 500)
-
-# Send player action
-network.send_game_data("ACTION", "JUMP")
-```
-
-### Receiving Data
-```python
-# In game loop
-messages = network.get_messages()
-for msg in messages:
-    if msg['type'] == "POSITION":
-        player_pos = msg['data']
-        update_player_position(msg['sender'], player_pos)
-    elif msg['type'] == "SCORE":
-        update_score(msg['sender'], msg['data'])
-```
-
-## Example Game Behaviour
-```python
-import pygame
-from RoomConnect import RoomConnect
-
-# Initialize
-pygame.init()
-network = RoomConnect()
+# Register message types before sending
 network.register_message_type("MOVE")
-network.register_message_type("FOOD")
+network.register_message_type("ATTACK")
 
-# Host or Join
-is_host = input("Host game? (y/n): ") == "y"
-if is_host:
-    room = network.host_game("Host")
-    print(f"Room Code: {room}")
-else:
-    room = input("Enter room code: ")
-    network.join_game(room, "Player2")
+# Send game data
+network.send_game_data("MOVE", {"x": 100, "y": 200})
 
-# Game Loop
-running = True
+# Get received messages
+messages = network.get_messages()
+```
+
+### Cleanup
+```python
+# Close connections
+network.close()
+```
+
+## Function Reference
+
+| Function | Description |
+|----------|-------------|
+| `set_token(token)` | Set ngrok authentication token |
+| `host_game(nickname)` | Start hosting, returns room number |
+| `join_game(room_number, nickname)` | Join existing room, returns success boolean |
+| `register_message_type(msg_type)` | Register valid message type |
+| `send_game_data(msg_type, data)` | Send data to other players |
+| `get_messages()` | Get and clear message queue |
+| `close()` | Clean up connections |
+
+## Example Game Loop
+```python
 while running:
-    # Handle game events
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                network.send_game_data("MOVE", "RIGHT")
+    # Send player position
+    network.send_game_data("MOVE", player_position)
     
-    # Process network messages
+    # Process received messages
     messages = network.get_messages()
     for msg in messages:
         if msg['type'] == "MOVE":
-            update_player_movement(msg['sender'], msg['data'])
-        elif msg['type'] == "FOOD":
-            update_food_position(msg['data'])
+            update_other_player(msg['data'])
 ```
-
-### Properties
-- `connected` (bool): Connection status
-- `is_host` (bool): Host status
-- `is_client` (bool): Client status
-- `nickname` (str): Player nickname
-
-### Methods
-- `host_game(nickname)`: Start hosting
-- `join_game(room_number, nickname)`: Join game
-- `register_message_type(msg_type)`: Register message type
-- `send_game_data(msg_type, data)`: Send game data
-- `get_messages()`: Get received messages
-- `close()`: Clean up connections
