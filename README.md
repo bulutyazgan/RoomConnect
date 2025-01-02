@@ -46,7 +46,7 @@ Messages are passed as dictionaries:
 ## Setup
 1. Install dependencies:
 ```bash
-pip install pyngrok pygame
+pip install ngrok pygame
 ```
 
 2. Initialize RoomConnect:
