@@ -152,7 +152,6 @@ while running:
 - `network.join_game(room_number, nickname)` - Join existing room
 - `network.send_game_data(type, data)` - Send game data
 - `network.get_messages()` - Get received messages
-- `network.update()` - Update network state
 - `network.close()` - Close connections
 
 ## Example Projects
