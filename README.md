@@ -16,6 +16,15 @@ This makes sharing connection details simple and user-friendly.
 - Easy Pygame integration
 - Automatic connection handling
 
+## Powered by ngrok
+This project utilizes [ngrok](https://ngrok.com/) for networking capabilities. ngrok is a fantastic service that makes local development publicly accessible. Please visit their website to learn more about their services and terms.
+
+- This is an open source educational project
+- Requires a free ngrok authtoken
+- Please review [ngrok's terms of service](https://ngrok.com/terms) before use
+
+> **Disclaimer:** This project is not intended for commercial use or high-traffic applications. Users must adhere to ngrok's free-tier limitations, including connection caps, bandwidth limits, and session expiration policies. Any misuse of ngrok's services, including attempts to circumvent its terms, is strictly prohibited.
+
 ## How It Works
 RoomConnect uses a message system similar to Pygame's event system. Instead of checking for events, you check for network messages in your game loop:
 
