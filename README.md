@@ -1,146 +1,124 @@
-# RoomConnect: Easy Multiplayer Integration for Pygame
-
-RoomConnect is a networking library designed to simplify multiplayer game development in Pygame. It handles network connections through ngrok, converting complex URLs into simple room numbers, making it easy to connect players without port forwarding.
-
-## Core Features
-- Simple room number system for connections
-- Message-based game state synchronization
-- Easy integration with Pygame game loops
-- Automatic connection handling
-- JSON-based data transmission
+# RoomConnect
+A Pygame networking library that simplifies multiplayer game development by converting complex ngrok URLs into simple room numbers.
 
 ## How It Works
-RoomConnect uses a message system similar to Pygame's event system. Instead of checking for events, you check for network messages in your game loop:
+RoomConnect solves the dynamic URL problem of ngrok's free tier:
 
-<<<<<<< HEAD
-```python
-# Game loop example
-while running:
-    # Check network messages
-    messages = network.get_messages():
-        for msg in messages:
-            if msg['type'] == 'move':
-                handle_player_move(msg['data'])
-    
-    # Regular game logic
-    game_update()
-    draw_screen()
-=======
-## Features
-- Converts dynamic ngrok URLs into room numbers for easy sharing.
-- Eliminates the need for port forwarding.
-- Serves as a foundation for integrating multiplayer functionalities into games or other network-based applications.
+1. **Normal ngrok URL**: `tcp://8.tcp.eu.ngrok.io:12345`
+2. **RoomConnect room number**: `812345`
 
-## Setup
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/siryazgan/RoomConnect
-   cd RoomConnect
-   ```
-2. Install the required dependencies by running:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Run the server and client scripts to start the chatroom. (The server will ask for your ngrok auth-token the first time you run it, and save it to a file named `.ngrok_token.txt`)
+This makes sharing connection details simple and user-friendly.
 
-## Example Usage
-Below are some screenshots demonstrating the algorithm's basics in action:
+## Core Features
+- Converts ngrok URLs to simple room numbers
+- No port forwarding needed
+- Message-based game state sync
+- Easy Pygame integration
+- Automatic connection handling
 
-![Example usage](screenshots/screenshot1.png)
-![Example usage](screenshots/screenshot2.png)
-
-## Possible Errors and Troubleshooting
-- **Region-Specific Issues:** The connection assumes that your ngrok URL uses the "eu" prefix. If you are outside the EU or if ngrok generates a URL with a different format, you may need to modify the link handling in the code.
-- **Other Issues:** Ensure that your ngrok token is valid and that all dependencies are installed correctly.
-
-## Feedback
-I am open to feedback and suggestions! Feel free to raise issues or contribute.
-
-# RoomConnect 🎮
-
-Make your Pygame games multiplayer! Like playing with friends over the internet.
-
-## How to Start 🚀
-
-1. Install the thing you need:
-```bash
-pip install ngrok
->>>>>>> 1b36e018fab4397b4ec1a7d00a1b3b1723626386
-```
-
-## Message System
-Messages are passed as dictionaries:
-```python
-{
-    'type': 'move',           # Custom message type
-    'data': {'x': 10, 'y': 20}, # Any game data
-    'sender': 'Player1'       # Automatically added
-}
-```
-
-## Setup
-1. Install dependencies:
-```bash
-pip install pyngrok pygame
-```
-
-2. Initialize RoomConnect:
+## Quick Setup
 ```python
 from RoomConnect import RoomConnect
 
+# Initialize
 network = RoomConnect()
-network.set_token("your_ngrok_token")
-```
+network.set_token("your-ngrok-token")
 
-## Hosting & Joining Games
-```python
-# Host
+# Host Game
 room_number = network.host_game("Player1")
-network.register_message_type("move")
+print(f"Share this room number: {room_number}")
 
-# Join
-network.join_game(room_number, "Player2")
-network.register_message_type("move")
+# OR Join Game
+network.join_game("812345", "Player2")
 ```
 
-## Sending & Receiving Data
+## Message System
+Messages in RoomConnect follow a two-part structure:
+
+1. **Message Type**: A string identifier that categorizes the message (e.g., 'move', 'attack', 'state')
+2. **Message Data**: A dictionary containing the actual game data
+
+Example message formats:
 ```python
-# Send game data
+# Player Movement
+{
+    'type': 'move',           # Message category
+    'data': {                 # Game-specific data
+        'position': (100, 200),
+        'velocity': (5, 0)
+    }
+}
+
+# Game State
+{
+    'type': 'state',
+    'data': {
+        'score': 100,
+        'lives': 3,
+        'level': 2
+    }
+}
+
+# Player Action
+{
+    'type': 'action',
+    'data': {
+        'action': 'jump',
+        'power': 50
+    }
+}
+```
+
+Common message types:
+- `'move'`: Player movement updates
+- `'state'`: Game state synchronization
+- `'action'`: Player actions/commands
+- `'join'`: Player connection events
+- `'leave'`: Player disconnection events
+
+```python
+# Sending messages
 network.send_game_data("move", {
-    'position': (100, 200),
-    'action': 'jump'
+    "position": (100, 200),
+    "action": "jump"
 })
 
-# Receive data in game loop
+# Receiving messages
 messages = network.get_messages()
 for msg in messages:
-    if msg['type'] == 'move':
-        update_player(msg['data'])
+    if msg["type"] == "move":
+        player.move(msg["data"]["position"])
 ```
 
+## Game Loop Integration
+```python
+while running:
+    # Handle network messages
+    if messages := network.get_messages():
+        for msg in messages:
+            if msg["type"] == "move":
+                handle_move(msg["data"])
+    
+    # Your game logic here
+    update()
+    draw()
+```
+
+## Core Functions
+- `network.set_token(token)` - Set ngrok auth token
+- `network.host_game(nickname)` - Create game room
+- `network.join_game(room_number, nickname)` - Join existing room
+- `network.send_game_data(type, data)` - Send game data
+- `network.get_messages()` - Get received messages
+- `network.update()` - Update network state
+- `network.close()` - Close connections
+
 ## Example Projects
-See the examples folder for complete implementations:
+See [`/examples`](/examples):
 - Tic-tac-toe multiplayer
 - Snake multiplayer (coming soon)
-- Pong multiplayer (coming soon)
 
-## Technical Details
-- Uses ngrok for connection handling
-- JSON serialization for data transfer
-- Threaded message handling
-- Automatic connection management
-
-## Error Handling
-- Connection status monitoring
-- Automatic disconnection detection
-- Message validation
-- Type checking for registered messages
-
-## Future Plans
-- More example games
-- Built-in game state synchronization
-- Latency compensation
-- Room management system
-
-## Contributing
-Contributions welcome! See CONTRIBUTING.md for guidelines.
+## Requirements
+- Python 3.6+
+- Pygame
+- ngrok account (free)
