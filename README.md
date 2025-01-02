@@ -45,7 +45,7 @@ Make your Pygame games multiplayer! Like playing with friends over the internet.
 
 1. Install the thing you need:
 ```bash
-pip install pyngrok
+pip install ngrok
 ```
 
 2. Add RoomConnect to your game:
