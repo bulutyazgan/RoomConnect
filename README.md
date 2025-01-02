@@ -1,136 +1,104 @@
-# RoomConnect: Simplified Multiplayer Connections Without Port Forwarding
+# RoomConnect: Easy Multiplayer Integration for Pygame
 
-RoomConnect is a proof-of-concept chatroom app designed to simplify network connections for developers. By leveraging ngrok's dynamic URLs and stripping them down into room numbers, it eliminates the need for port forwarding, making it easier to establish multiplayer connections over the internet.
+RoomConnect is a networking library designed to simplify multiplayer game development in Pygame. It handles network connections through ngrok, converting complex URLs into simple room numbers, making it easy to connect players without port forwarding.
 
-## What This Project Does
-This project converts ngrok-generated URLs into simplified room numbers, allowing clients to connect using these numbers. It mimics a common approach in multiplayer games, making it easier for developers to implement internet-based connections without the hassle of configuring port forwarding.
+## Core Features
+- Simple room number system for connections
+- Message-based game state synchronization
+- Easy integration with Pygame game loops
+- Automatic connection handling
+- JSON-based data transmission
 
-Currently, the project functions as a basic chatroom but demonstrates the potential to be integrated into more complex systems, such as multiplayer games built with frameworks like Pygame.
+## How It Works
+RoomConnect uses a message system similar to Pygame's event system. Instead of checking for events, you check for network messages in your game loop:
 
-## Features
-- Converts dynamic ngrok URLs into room numbers for easy sharing.
-- Eliminates the need for port forwarding.
-- Serves as a foundation for integrating multiplayer functionalities into games or other network-based applications.
-
-## Setup
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/siryazgan/RoomConnect
-   cd RoomConnect
-   ```
-2. Install the required dependencies by running:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Run the server and client scripts to start the chatroom. (The server will ask for your ngrok auth-token the first time you run it, and save it to a file named `.ngrok_token.txt`)
-
-## Example Usage
-Below are some screenshots demonstrating the application in action:
-
-![Example usage](screenshots/screenshot1.png)
-![Example usage](screenshots/screenshot2.png)
-
-## Possible Errors and Troubleshooting
-- **Region-Specific Issues:** The connection assumes that your ngrok URL uses the "eu" prefix. If you are outside the EU or if ngrok generates a URL with a different format, you may need to modify the link handling in the code.
-- **Other Issues:** Ensure that your ngrok token is valid and that all dependencies are installed correctly.
-
-## Future Plans
-If there is interest, I plan to:
-- Expand the project for better integration with game development frameworks like Pygame.
-- Add features such as dynamic room creation and more robust error handling.
-- Explore additional use cases for the room number functionality.
-
-## Feedback
-I am open to feedback and suggestions! Feel free to raise issues or contribute.
-
-## Documentation
-For detailed usage instructions, see the [documentation](documentation.md).
-
-# RoomConnect 🎮
-
-Make your Pygame games multiplayer! Like playing with friends over the internet.
-
-## How to Start 🚀
-
-1. Install the thing you need:
-```bash
-pip install pyngrok
+```python
+# Game loop example
+while running:
+    # Check network messages
+    if messages := network.get_messages():
+        for msg in messages:
+            if msg['type'] == 'move':
+                handle_player_move(msg['data'])
+    
+    # Regular game logic
+    game_update()
+    draw_screen()
 ```
 
-2. Add RoomConnect to your game:
+## Message System
+Messages are passed as dictionaries:
 ```python
-from RoomConnect import RoomConnect
-network = RoomConnect()
-```
-
-## How it Works 📝
-
-Think of it like passing notes in class:
-- One player is the "host" (like the teacher)
-- Other players can "join" using a special room number
-- Players send messages to tell others what they did
-
-### Messages are like Notes 📨
-
-Messages look like this:
-```python
-# In a game of Tic-Tac-Toe:
 {
-    'type': 'move',         # What kind of message
-    'data': {              # What happened
-        'position': (1, 1),  # Where they clicked
-        'symbol': 'X'        # What to draw
-    },
-    'sender': 'Player1'    # Who sent it
+    'type': 'move',           # Custom message type
+    'data': {'x': 10, 'y': 20}, # Any game data
+    'sender': 'Player1'       # Automatically added
 }
 ```
 
-## Making Your Game Multiplayer 🎯
+## Setup
+1. Install dependencies:
+```bash
+pip install pyngrok pygame
+```
 
-1. Start the game:
+2. Initialize RoomConnect:
 ```python
+from RoomConnect import RoomConnect
+
 network = RoomConnect()
-network.set_token("your_ngrok_token")  # Only needed once!
-
-# To be the host:
-room_number = network.host_game("YourName")
-print(f"Tell your friend this number: {room_number}")
-
-# To join a friend's game:
-network.join_game(room_number, "YourName")
+network.set_token("your_ngrok_token")
 ```
 
-2. Tell RoomConnect what messages to expect:
+## Hosting & Joining Games
 ```python
+# Host
+room_number = network.host_game("Player1")
 network.register_message_type("move")
-network.register_message_type("chat")
+
+# Join
+network.join_game(room_number, "Player2")
+network.register_message_type("move")
 ```
 
-3. Send things that happen in your game:
+## Sending & Receiving Data
 ```python
-# When player makes a move:
+# Send game data
 network.send_game_data("move", {
-    "x": 100,
-    "y": 200
+    'position': (100, 200),
+    'action': 'jump'
 })
-```
 
-4. Check for messages from other players:
-```python
-# In your game loop:
+# Receive data in game loop
 messages = network.get_messages()
-if messages:
-    for msg in messages:
-        if msg['type'] == "move":
-            # Do something with msg['data']
+for msg in messages:
+    if msg['type'] == 'move':
+        update_player(msg['data'])
 ```
 
-## Important Functions 🛠️
+## Example Projects
+See the examples folder for complete implementations:
+- Tic-tac-toe multiplayer
+- Snake multiplayer (coming soon)
+- Pong multiplayer (coming soon)
 
-- `host_game(nickname)` - Start a new game
-- `join_game(room_number, nickname)` - Join someone's game
-- `register_message_type(type)` - Tell what messages to expect
-- `send_game_data(type, data)` - Send something to other players
-- `get_messages()` - Get messages from other players
+## Technical Details
+- Uses ngrok for connection handling
+- JSON serialization for data transfer
+- Threaded message handling
+- Automatic connection management
 
-That's it! Now you can make any game multiplayer! 🌟
+## Error Handling
+- Connection status monitoring
+- Automatic disconnection detection
+- Message validation
+- Type checking for registered messages
+
+## Future Plans
+- More example games
+- Built-in game state synchronization
+- Latency compensation
+- Room management system
+
+## Contributing
+Contributions welcome! See CONTRIBUTING.md for guidelines.
