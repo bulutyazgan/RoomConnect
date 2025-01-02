@@ -27,8 +27,8 @@ Currently, the project functions as a basic chatroom but demonstrates the potent
 ## Example Usage
 Below are some screenshots demonstrating the application in action:
 
-![Example usage](screenshot1.png)
-![Example usage](screenshot2.png)
+![Example usage](screenshots/screenshot1.png)
+![Example usage](screenshots/screenshot2.png)
 
 ## Possible Errors and Troubleshooting
 - **Region-Specific Issues:** The connection assumes that your ngrok URL uses the "eu" prefix. If you are outside the EU or if ngrok generates a URL with a different format, you may need to modify the link handling in the code.
@@ -41,4 +41,7 @@ If there is interest, I plan to:
 - Explore additional use cases for the room number functionality.
 
 ## Feedback
-I am open to feedback and suggestions! Feel free to raise issues or contribute via pull requests on the [GitHub repository](https://github.com/siryazgan/RoomConnect).
+I am open to feedback and suggestions! Feel free to raise issues or contribute.
+
+## Documentation
+For detailed usage instructions, see the [documentation](documentation.md).

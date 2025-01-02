@@ -1,5 +1,7 @@
 env
 
 .ngrok_token.txt
+prototypes/.ngrok_token.txt
 
+# macOS
 .DS_Store
