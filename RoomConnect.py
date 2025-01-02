@@ -1,6 +1,5 @@
 import socket
 import threading
-import pygame
 import ngrok
 import os
 import json
@@ -102,20 +101,28 @@ class RoomConnect:
         self.connected = False
 
     def _process_data(self, data):
-        # Create pygame event from received data
-        event_data = {'type': 'NETWORK_DATA', 'data': data}
-        pygame.event.post(pygame.event.Event(pygame.USEREVENT, event_data))
+        """Process incoming JSON data"""
+        try:
+            message = json.loads(data)
+            if message['type'] in self.message_types:
+                self.message_queue.append(message)
+        except:
+            pass
 
     def send_data(self, data):
+        """Legacy method - consider using send_game_data instead"""
         if self.connected:
             try:
-                message = f"({self.nickname}): {data}"
+                message = {
+                    'type': 'CHAT',
+                    'data': data,
+                    'sender': self.nickname,
+                    'timestamp': time.time()
+                }
                 if self.is_host:
-                    # Broadcast to all clients
-                    pass
+                    self._broadcast(json.dumps(message))
                 else:
-                    # Send to host
-                    self.socket.send(message.encode('utf-8'))
+                    self.socket.send(json.dumps(message).encode('utf-8'))
                 return True
             except:
                 return False
@@ -161,10 +168,6 @@ class RoomConnect:
     def register_message_type(self, msg_type):
         """Register a valid message type"""
         self.message_types.add(msg_type)
-
-    def update(self):
-        # Call this in game loop
-        pass
 
     def close(self):
         self.socket.close()
