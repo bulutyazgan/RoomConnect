@@ -25,7 +25,7 @@ Currently, the project functions as a basic chatroom but demonstrates the potent
 3. Run the server and client scripts to start the chatroom. (The server will ask for your ngrok auth-token the first time you run it, and save it to a file named `.ngrok_token.txt`)
 
 ## Example Usage
-Below are some screenshots demonstrating the application in action:
+Below are some screenshots demonstrating the algorithm's basics in action:
 
 ![Example usage](screenshots/screenshot1.png)
 ![Example usage](screenshots/screenshot2.png)
@@ -34,17 +34,8 @@ Below are some screenshots demonstrating the application in action:
 - **Region-Specific Issues:** The connection assumes that your ngrok URL uses the "eu" prefix. If you are outside the EU or if ngrok generates a URL with a different format, you may need to modify the link handling in the code.
 - **Other Issues:** Ensure that your ngrok token is valid and that all dependencies are installed correctly.
 
-## Future Plans
-If there is interest, I plan to:
-- Expand the project for better integration with game development frameworks like Pygame.
-- Add features such as dynamic room creation and more robust error handling.
-- Explore additional use cases for the room number functionality.
-
 ## Feedback
 I am open to feedback and suggestions! Feel free to raise issues or contribute.
-
-## Documentation
-For detailed usage instructions, see the [documentation](documentation.md).
 
 # RoomConnect 🎮
 
