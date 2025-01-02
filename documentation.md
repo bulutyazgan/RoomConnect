@@ -71,9 +71,7 @@ for msg in messages:
         update_score(msg['sender'], msg['data'])
 ```
 
-## Complete Example
-
-### Multiplayer Snake Game
+## Example Game Behaviour
 ```python
 import pygame
 from RoomConnect import RoomConnect
