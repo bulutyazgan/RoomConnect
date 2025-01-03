@@ -19,7 +19,7 @@ This project utilizes [ngrok](https://ngrok.com/) for networking capabilities. n
 
 - This is an open source educational project
 - Requires a free ngrok authtoken
-- Please review [ngrok's terms of service](https://ngrok.com/terms) before use
+- Please review [ngrok's terms of service](https://ngrok.com/tos) before use
 
 > **Disclaimer:** This project is not intended for commercial use or high-traffic applications. Users must adhere to ngrok's free-tier limitations, including connection caps, bandwidth limits, and session expiration policies. Any misuse of ngrok's services, including attempts to circumvent its terms, is strictly prohibited.
 

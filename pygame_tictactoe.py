@@ -2,6 +2,10 @@ import pygame
 import sys
 from RoomConnect import RoomConnect
 
+# The room number is displayed on the terminal upon execution. 
+# I've also put my ngrok token inside a file named ".ngrok_token.txt" which gets read by the initialization script. 
+# This is just a simple game for demonstration purposes, needs further development.
+
 class TicTacToe:
     def __init__(self):
         pygame.init()
