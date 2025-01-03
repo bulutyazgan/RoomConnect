@@ -16,6 +16,7 @@ class RoomConnect:
         self.message_queue = []
         self.clients = []  # Only used by host
         self.regions = {
+            # these are the prefixes i know that ngrok uses, let me know if you find something i should add
             "eu": ".eu", 
             "us": ""
             }
