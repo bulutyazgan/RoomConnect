@@ -1,6 +1,6 @@
 import pygame
 import sys
-import RoomConnect
+from RoomConnect import RoomConnect
 
 class TicTacToe:
     def __init__(self):
@@ -23,7 +23,7 @@ class TicTacToe:
         self.game_active = False
         
         # Network
-        self.network = RoomConnect.RoomConnect()
+        self.network = RoomConnect(27555, "eu")
         with open(".ngrok_token.txt") as f:
             token = f.read().strip()
             self.network.set_token(token)

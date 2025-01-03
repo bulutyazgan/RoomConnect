@@ -2,20 +2,25 @@ import socket
 import threading
 import ngrok
 import json
-import time
 
 class RoomConnect:
-    def __init__(self):
+    def __init__(self, port=27555, region="eu"):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.is_host = False
         self.is_client = False
         self.nickname = None
         self.connected = False
-        self.port = 27555
+        self.port = port
         self.room_number = None
         self.message_types = set()
         self.message_queue = []
         self.clients = []  # Only used by host
+        self.regions = {
+            "eu": ".eu", 
+            "us": ""
+            }
+        if region in self.regions:
+            self.region = region
 
     def set_token(self, token):
         """Set ngrok authentication token"""
@@ -30,7 +35,7 @@ class RoomConnect:
         # Generate room number using ngrok
         tunnel = ngrok.forward(self.port, "tcp")
         public_url = tunnel.url()
-        self.room_number = public_url.replace("tcp://", "").replace(".tcp.eu.ngrok.io:", "")
+        self.room_number = public_url.replace("tcp://", "").replace(f".tcp{self.regions[self.region]}.ngrok.io:", "")
         
         threading.Thread(target=self._accept_connections, daemon=True).start()
         return self.room_number
@@ -41,7 +46,7 @@ class RoomConnect:
         self.room_number = room_number
         
         # Parse room number
-        host = room_number[0] + ".tcp.eu.ngrok.io"
+        host = room_number[0] + f".tcp{self.regions[self.region]}.ngrok.io"
         port = int(room_number[1:])
         
         try:
