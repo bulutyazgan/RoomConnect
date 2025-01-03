@@ -2,7 +2,7 @@
 A Pygame networking library that simplifies multiplayer game development by converting complex ngrok URLs into simple room numbers.
 
 ## How It Works
-RoomConnect solves the dynamic URL problem of ngrok's free tier:
+RoomConnect is not a project that stands on it's own, it's only a simple interpretation to using the dynamic URL's of ngrok's free tier:
 
 1. **Normal ngrok URL**: `tcp://8.tcp.eu.ngrok.io:12345`
 2. **RoomConnect room number**: `812345`
