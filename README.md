@@ -1,5 +1,5 @@
 # RoomConnect
-A Pygame networking library that simplifies multiplayer game development by converting complex ngrok URLs into simple room numbers.
+A Pygame networking library that simplifies multiplayer game development by converting complex ngrok URLs into simple room numbers, while also providing networking methods to easily integrate multiplayer functionalities into basic projects. No port forwarding required!
 
 ## How It Works
 RoomConnect is not a project that stands on its own, it is only an interpretation to using the dynamic URL's of ngrok's free tier:
@@ -9,9 +9,7 @@ RoomConnect is not a project that stands on its own, it is only an interpretatio
 
 This makes sharing connection details simple and user-friendly.
 
-## Core Features
-- Converts ngrok URLs to simple room numbers
-- No port forwarding needed
+## Additional Features
 - Message-based game state sync
 - Easy Pygame integration
 - Automatic connection handling
