@@ -7,7 +7,7 @@ RoomConnect is not a project that stands on its own, it is only an interpretatio
 1. **Normal ngrok URL**: `tcp://8.tcp.eu.ngrok.io:12345`
 2. **RoomConnect room number**: `812345`
 
-This makes sharing connection details simple and user-friendly.
+This makes sharing connection details simple and user-friendly. The library also includes built-in features to handle networking easily.
 
 ## Additional Features
 - Message-based game state sync
