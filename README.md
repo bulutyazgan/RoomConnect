@@ -152,11 +152,6 @@ while running:
 - `network.get_messages()` - Get received messages
 - `network.close()` - Close connections
 
-## Example Projects
-See [`/examples`](/examples):
-- Tic-tac-toe multiplayer
-- Snake multiplayer (coming soon)
-
 ## Requirements
 - Python 3.6+
 - Pygame
